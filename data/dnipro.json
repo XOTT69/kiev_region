@@ -634,12 +634,12 @@
     }
   },
   "lastUpdateStatus": {
-    "status": "parsed",
-    "ok": true,
-    "code": 200,
-    "message": null,
-    "at": "2025-11-06T10:25:44.906Z",
-    "attempt": 12
+    "status": "error",
+    "ok": false,
+    "code": 422,
+    "message": "Marker `DisconSchedule.fact =` not found in outputs/dnipro.html",
+    "at": "2025-11-06T10:40:16.636Z",
+    "attempt": 13
   },
   "meta": {
     "schemaVersion": "1.0.0",
