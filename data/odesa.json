@@ -1,6 +1,6 @@
 {
   "regionId": "odesa",
-  "lastUpdated": "2025-11-06T17:07:13.652Z",
+  "lastUpdated": "2025-11-06T17:25:53.666Z",
   "fact": {
     "data": {
       "1762380000": {
@@ -78,7 +78,7 @@
           "19": "yes",
           "20": "yes",
           "21": "yes",
-          "22": "no",
+          "22": "yes",
           "23": "yes",
           "24": "yes"
         },
@@ -104,7 +104,7 @@
           "19": "yes",
           "20": "yes",
           "21": "yes",
-          "22": "no",
+          "22": "yes",
           "23": "yes",
           "24": "yes"
         },
@@ -232,8 +232,8 @@
           "17": "yes",
           "18": "second",
           "19": "no",
-          "20": "no",
-          "21": "no",
+          "20": "yes",
+          "21": "yes",
           "22": "yes",
           "23": "yes",
           "24": "yes"
@@ -258,8 +258,8 @@
           "17": "yes",
           "18": "second",
           "19": "no",
-          "20": "no",
-          "21": "no",
+          "20": "yes",
+          "21": "yes",
           "22": "yes",
           "23": "yes",
           "24": "yes"
@@ -632,7 +632,7 @@
         }
       }
     },
-    "update": "06.11.2025 18:45",
+    "update": "06.11.2025 19:03",
     "today": 1762380000
   },
   "preset": {
@@ -3027,18 +3027,18 @@
         }
       }
     },
-    "updateFact": "06.11.2025 18:45"
+    "updateFact": "06.11.2025 19:03"
   },
   "lastUpdateStatus": {
     "status": "parsed",
     "ok": true,
     "code": 200,
     "message": null,
-    "at": "2025-11-06T17:07:13.652Z",
-    "attempt": 38
+    "at": "2025-11-06T17:25:53.666Z",
+    "attempt": 39
   },
   "meta": {
     "schemaVersion": "1.0.0",
-    "contentHash": "a4eddfdc3e54a27e409b28977d07d999c31ee2becd7c6f2db681eb49239fb78a"
+    "contentHash": "b256d5618a9a58a2f56729cefc17a7dfe01cb9714d4e20f8560093362719078e"
   }
 }
