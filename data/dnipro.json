@@ -5,12 +5,12 @@
   "lastUpdated": null,
   "data": [],
   "lastUpdateStatus": {
-    "status": "idle",
-    "ok": true,
-    "code": null,
-    "message": null,
-    "at": null,
-    "attempt": 0
+    "status": "error",
+    "ok": false,
+    "code": 422,
+    "message": "Marker `DisconSchedule.fact =` not found in outputs/dnipro.html",
+    "at": "2025-11-06T08:36:24.473Z",
+    "attempt": 1
   },
   "meta": {
     "schemaVersion": "1.0.0",
@@ -18,7 +18,7 @@
     "timezone": "Europe/Kyiv",
     "source": {
       "type": "proxy",
-      "upstream": null,
+      "upstream": "https://www.dtek-dnem.com.ua/ua/shutdowns",
       "notes": "Set upstream URL or identifier of original data source when known"
     },
     "ttlSeconds": 300,
