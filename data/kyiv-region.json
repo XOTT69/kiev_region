@@ -2,7 +2,7 @@
   "regionId": "kyiv-region",
   "regionName": null,
   "regionType": null,
-  "lastUpdated": "2025-11-06T09:50:48.624Z",
+  "lastUpdated": "2025-11-06T10:50:52.579Z",
   "data": {
     "1762380000": {
       "GPV1.1": {
@@ -634,12 +634,12 @@
     }
   },
   "lastUpdateStatus": {
-    "status": "error",
-    "ok": false,
-    "code": 422,
-    "message": "Marker `DisconSchedule.fact =` not found in outputs/kyiv-region.html",
-    "at": "2025-11-06T10:40:16.669Z",
-    "attempt": 13
+    "status": "parsed",
+    "ok": true,
+    "code": 200,
+    "message": null,
+    "at": "2025-11-06T10:50:52.578Z",
+    "attempt": 14
   },
   "meta": {
     "schemaVersion": "1.0.0",
