@@ -3016,8 +3016,8 @@
     "ok": false,
     "code": 422,
     "message": "Marker `DisconSchedule.fact =` not found in outputs/kyiv.html",
-    "at": "2025-11-06T19:05:49.854Z",
-    "attempt": 47
+    "at": "2025-11-06T19:23:06.929Z",
+    "attempt": 48
   },
   "meta": {
     "schemaVersion": "1.0.0",
