@@ -3016,8 +3016,8 @@
     "ok": false,
     "code": 422,
     "message": "Marker `DisconSchedule.fact =` not found in /home/runner/work/outage-data-ua/outage-data-ua/outputs/kyiv-region.html",
-    "at": "2025-11-08T14:08:03.794Z",
-    "attempt": 198
+    "at": "2025-11-08T14:23:52.875Z",
+    "attempt": 199
   },
   "meta": {
     "schemaVersion": "1.0.0",
