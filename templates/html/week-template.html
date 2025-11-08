@@ -3,17 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Графік можливих відключень — Шаблон</title>
+  <title>Графік можливих відключень — Тиждень</title>
   <link rel="stylesheet" href="schedule-shared.css">
 </head>
 <body>
   <div class="container">
-    <h1>Графік відключень:</h1>
-    <p class="muted" id="lastUpdated"></p>
-    <div class="panel table-wrap">
-      <table id="today"></table>
-    </div>
     <h1>Графік можливих відключень на тиждень:</h1>
+    <p class="muted" id="lastUpdated"></p>
     <div class="panel table-wrap">
       <table id="matrix"></table>
     </div>
@@ -26,9 +22,10 @@
     </div>
     <p class="muted hash" id="meta"></p>
   </div>
+
   <script src="schedule-shared.js"></script>
   <script>
-    Schedule.scheduleInit({ mode: 'full' });
+    Schedule.scheduleInit({ mode: 'week' });
   </script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Графік можливих відключень — Шаблон</title>
+  <title>Графік можливих відключень — Аварійні (сьогодні/завтра)</title>
   <link rel="stylesheet" href="schedule-shared.css">
 </head>
 <body>
@@ -12,10 +12,6 @@
     <p class="muted" id="lastUpdated"></p>
     <div class="panel table-wrap">
       <table id="today"></table>
-    </div>
-    <h1>Графік можливих відключень на тиждень:</h1>
-    <div class="panel table-wrap">
-      <table id="matrix"></table>
     </div>
     <div class="legend" aria-label="Легенда">
       <div class="legend-item"><span class="legend-box state-yes" title="Світло є"></span> Світло є</div>
@@ -28,7 +24,7 @@
   </div>
   <script src="schedule-shared.js"></script>
   <script>
-    Schedule.scheduleInit({ mode: 'full' });
+    Schedule.scheduleInit({ mode: 'emergency' });
   </script>
 </body>
 </html>
