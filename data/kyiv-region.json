@@ -1,6 +1,6 @@
 {
   "regionId": "kyiv-region",
-  "lastUpdated": "2025-11-10T04:02:03.872Z",
+  "lastUpdated": "2025-11-10T04:52:21.104Z",
   "fact": {
     "data": {
       "1762725600": {
@@ -168,7 +168,7 @@
           "5": "no",
           "6": "no",
           "7": "no",
-          "8": "no",
+          "8": "yes",
           "9": "yes",
           "10": "yes",
           "11": "yes",
@@ -632,7 +632,7 @@
         }
       }
     },
-    "update": "09.11.2025 20:42",
+    "update": "10.11.2025 06:42",
     "today": 1762725600
   },
   "preset": {
@@ -3009,19 +3009,19 @@
         }
       }
     },
-    "updateFact": "09.11.2025 20:42"
+    "updateFact": "10.11.2025 06:42"
   },
   "lastUpdateStatus": {
-    "status": "error",
-    "ok": false,
-    "code": 422,
-    "message": "Marker `DisconSchedule.fact =` not found in /home/runner/work/outage-data-ua/outage-data-ua/outputs/kyiv-region.html",
-    "at": "2025-11-10T04:32:25.807Z",
-    "attempt": 334
+    "status": "parsed",
+    "ok": true,
+    "code": 200,
+    "message": null,
+    "at": "2025-11-10T04:52:21.104Z",
+    "attempt": 335
   },
   "meta": {
     "schemaVersion": "1.0.0",
-    "contentHash": "bb3106b8df782cd810a91a03439e92abfba448d7cdefc71b0e4ea5427ed6adc9"
+    "contentHash": "bd785e320bbaa103f567dc63dcfd59cb2b32bf6dcf2828166d4390555b14bdc9"
   },
   "regionAffiliation": "Київська обл."
 }
