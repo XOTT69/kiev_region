@@ -1,6 +1,6 @@
 {
   "regionId": "kyiv",
-  "lastUpdated": "2025-11-10T12:28:10.468Z",
+  "lastUpdated": "2025-11-10T13:33:00.297Z",
   "fact": {
     "data": {
       "1762725600": {
@@ -150,11 +150,11 @@
           "13": "no",
           "14": "no",
           "15": "no",
-          "16": "no",
-          "17": "no",
-          "18": "no",
-          "19": "no",
-          "20": "first",
+          "16": "first",
+          "17": "yes",
+          "18": "yes",
+          "19": "yes",
+          "20": "yes",
           "21": "yes",
           "22": "yes",
           "23": "second",
@@ -632,7 +632,7 @@
         }
       }
     },
-    "update": "10.11.2025 06:57",
+    "update": "10.11.2025 15:09",
     "today": 1762725600
   },
   "preset": {
@@ -3009,19 +3009,19 @@
         }
       }
     },
-    "updateFact": "10.11.2025 06:57"
+    "updateFact": "10.11.2025 15:09"
   },
   "lastUpdateStatus": {
-    "status": "error",
-    "ok": false,
-    "code": 422,
-    "message": "Marker `DisconSchedule.fact =` not found in /home/runner/work/outage-data-ua/outage-data-ua/outputs/kyiv.html",
-    "at": "2025-11-10T13:16:16.448Z",
-    "attempt": 368
+    "status": "parsed",
+    "ok": true,
+    "code": 200,
+    "message": null,
+    "at": "2025-11-10T13:33:00.297Z",
+    "attempt": 369
   },
   "meta": {
     "schemaVersion": "1.0.0",
-    "contentHash": "2acdab4b88565a9c88a1e7367e64b76d70290763ad537f8ef3386d7965594658"
+    "contentHash": "bb866ee76843691973f3998c317bb0ec2956a12c5cf002612ee33055c960b181"
   },
   "regionAffiliation": "м. Київ"
 }
