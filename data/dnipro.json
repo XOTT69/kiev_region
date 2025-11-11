@@ -1,6 +1,6 @@
 {
   "regionId": "dnipro",
-  "lastUpdated": "2025-11-11T17:39:00.630Z",
+  "lastUpdated": "2025-11-11T17:51:02.479Z",
   "fact": {
     "data": {
       "1762812000": {
@@ -51,7 +51,7 @@
           "18": "no",
           "19": "no",
           "20": "no",
-          "21": "no",
+          "21": "yes",
           "22": "yes",
           "23": "yes",
           "24": "yes"
@@ -341,8 +341,8 @@
           "20": "yes",
           "21": "yes",
           "22": "yes",
-          "23": "yes",
-          "24": "yes"
+          "23": "second",
+          "24": "no"
         },
         "GPV1.2": {
           "1": "yes",
@@ -367,8 +367,8 @@
           "20": "yes",
           "21": "yes",
           "22": "yes",
-          "23": "yes",
-          "24": "yes"
+          "23": "second",
+          "24": "no"
         },
         "GPV2.1": {
           "1": "yes",
@@ -393,8 +393,8 @@
           "20": "yes",
           "21": "yes",
           "22": "yes",
-          "23": "second",
-          "24": "no"
+          "23": "yes",
+          "24": "yes"
         },
         "GPV2.2": {
           "1": "yes",
@@ -419,8 +419,8 @@
           "20": "yes",
           "21": "yes",
           "22": "yes",
-          "23": "second",
-          "24": "no"
+          "23": "yes",
+          "24": "yes"
         },
         "GPV3.1": {
           "1": "yes",
@@ -632,7 +632,7 @@
         }
       }
     },
-    "update": "11.11.2025 19:33",
+    "update": "11.11.2025 19:39",
     "today": 1762812000
   },
   "preset": {
@@ -3009,19 +3009,19 @@
         }
       }
     },
-    "updateFact": "11.11.2025 19:33"
+    "updateFact": "11.11.2025 19:39"
   },
   "lastUpdateStatus": {
     "status": "parsed",
     "ok": true,
     "code": 200,
     "message": null,
-    "at": "2025-11-11T17:39:00.629Z",
-    "attempt": 468
+    "at": "2025-11-11T17:51:02.479Z",
+    "attempt": 469
   },
   "meta": {
     "schemaVersion": "1.0.0",
-    "contentHash": "ddb322ff5b4c9cec63090d8211bd3e24a4b7d86faaad8d0964b00217bf20d179"
+    "contentHash": "141c5c042844beb1e6b4806c8243b6b57a82bde2b95779b6c444dffe683ff70e"
   },
   "regionAffiliation": "Дніпро та обл."
 }
