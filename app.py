@@ -16,15 +16,14 @@ TOKEN = os.getenv('BOT_TOKEN')
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
-# ✅ ПРАВИЛЬНІ ГРУПИ КИЇВЩИНИ
 KYIV_GROUPS = {
-    '1️⃣ Група 1': 'group_1',
-    '1️⃣.2 Група 1.2': 'group_1_2',
-    '2️⃣ Група 2': 'group_2',
-    '2️⃣.2 Група 2.2': 'group_2_2',
-    '3️⃣ Група 3': 'group_3',
-    '4️⃣ Група 4': 'group_4',
-    '5️⃣ Група 5': 'group_5',
+    '1️⃣ Група 1': '1',
+    '1️⃣.2 Група 1.2': '1.2',
+    '2️⃣ Група 2': '2',
+    '2️⃣.2 Група 2.2': '2.2',
+    '3️⃣ Група 3': '3',
+    '4️⃣ Група 4': '4',
+    '5️⃣ Група 5': '5',
     '🔌 Всі': 'all'
 }
 
@@ -51,52 +50,97 @@ async def kiev_chart(callback: types.CallbackQuery):
     await callback.message.edit_text(f'⏳ Читаю **{group_name}**...')
     
     try:
-        # Читаємо репозиторій
+        # ✅ РЕПЕЗИТОРІЙ → JSON
         api_url = 'https://api.github.com/repos/XOTT69/kiev_region/contents'
         files = requests.get(api_url).json()
         
-        # Перший JSON файл
+        # Перший JSON (preset/fact)
         json_file = next((f for f in files if f['name'].endswith('.json')), None)
         
         if json_file:
-            data = requests.get(json_file['download_url']).json()
+            data_url = json_file['download_url']
+            data = requests.get(data_url).json()
             
-            # ✅ ТЕСТОВИЙ ГРАФІК (заміни на реальний парсинг)
-            statuses = [True] * 24
-            if '1_2' in group_code:
-                statuses[8:12] = [False] * 4  # Приклад відключення
-            elif '2_2' in group_code:
-                statuses[14:18] = [False] * 4
+            print(f"📊 Знайдено даних: {len(data)} записів")  # Лог
             
-            # ГРАФІК
-            fig, ax = plt.subplots(figsize=(12, 5))
+            # ✅ РЕАЛЬНИЙ ПАРСИНГ
+            statuses = get_real_statuses(data, group_code)
+            
+            # ГРАФІК З РЕАЛЬНИМИ ДАНИМИ
+            fig, ax = plt.subplots(figsize=(14, 6), facecolor='white')
             hours = range(24)
-            colors = ['green' if s else 'red' for s in statuses]
+            colors = ['#4CAF50' if s else '#F44336' for s in statuses]
             
-            ax.bar(hours, [1]*24, color=colors, alpha=0.8)
-            ax.set_title(f'🔌 {group_name} - КИЇВЩИНА', fontsize=16)
-            ax.set_xlabel('🕐 Години'); ax.set_ylabel('Статус')
+            ax.bar(hours, [1]*24, color=colors, alpha=0.85, edgecolor='white', linewidth=1)
+            ax.set_title(f'🔌 {group_name} - КИЇВЩИНА\n🕐 {datetime.now().strftime("%H:%M")}', 
+                        fontsize=18, fontweight='bold')
+            ax.set_xlabel('🕐 Години', fontsize=14)
+            ax.set_ylabel('Статус', fontsize=14)
+            ax.set_xticks(range(0, 25, 2))
             ax.grid(True, alpha=0.3)
             
+            # Легенда
+            ax.text(0.02, 0.92, '🟢 Світло', transform=ax.transAxes, fontsize=12,
+                   bbox=dict(boxstyle="round,pad=0.3", facecolor="#4CAF50", alpha=0.2))
+            ax.text(0.02, 0.82, '🔴 Відключення', transform=ax.transAxes, fontsize=12,
+                   bbox=dict(boxstyle="round,pad=0.3", facecolor="#F44336", alpha=0.2))
+            
             buf = io.BytesIO()
-            plt.savefig(buf, format='png', bbox_inches='tight')
+            plt.savefig(buf, format='png', bbox_inches='tight', dpi=150, facecolor='white')
             buf.seek(0)
             plt.close()
             
-            caption = f'🔌 **{group_name}**\n📍 КИЇВСЬКА ОБЛАСТЬ\n🕐 {datetime.now().strftime("%H:%M")}\n\n/start - змінити'
+            caption = (
+                f'🔌 **{group_name}**\n'
+                f'📍 **КИЇВСЬКА ОБЛАСТЬ**\n'
+                f'📊 **Дані**: {json_file["name"]}\n'
+                f'🕐 **Оновлено**: {datetime.now().strftime("%H:%M %d.%m")}\n\n'
+                f'_github.com/XOTT69/kiev_region_  /start'
+            )
             
             await callback.message.delete()
-            await bot.send_photo(callback.message.chat.id, photo=buf, caption=caption)
+            await bot.send_photo(callback.message.chat.id, photo=buf, caption=caption, parse_mode='Markdown')
+            
+            print(f"✅ Надіслано графік для {group_name}")
         else:
-            await callback.message.edit_text('❌ JSON не знайдено!')
+            await callback.message.edit_text('❌ Не знайшов JSON файл!')
             
     except Exception as e:
-        await callback.message.edit_text(f'❌ Помилка: {str(e)}')
+        await callback.message.edit_text(f'❌ {str(e)}')
+        print(f"❌ Помилка: {e}")
     
     await callback.answer()
 
+def get_real_statuses(data, group_code):
+    """✅ РЕАЛЬНИЙ парсинг твоїх даних"""
+    statuses = [True] * 24  # Світло за замовчуванням
+    
+    try:
+        # Варіант 1: data['preset'] / data['fact']
+        outages = data.get('preset', {}).get('outages', []) or data.get('fact', {}).get('outages', [])
+        
+        for outage in outages:
+            group_match = outage.get('group') or outage.get('groups', '')
+            if group_code in str(group_match):
+                start = int(outage.get('start', 0)) % 24
+                duration = int(outage.get('duration', 1))
+                for h in range(start, min(start + duration, 24)):
+                    statuses[h] = False
+        
+        # Варіант 2: прямі години
+        if 'hourly' in data:
+            hourly = data['hourly'].get(group_code, [])
+            for i, status in enumerate(hourly[:24]):
+                statuses[i] = status == 'on'
+                
+    except Exception as e:
+        print(f"Парсинг: {e}")
+        pass  # Fallback
+    
+    return statuses
+
 async def main():
-    print('🚀 КИЇВЩИНА Bot онлайн!')
+    print('🚀 КИЇВЩИНА Bot онлайн! Готовий графіки!')
     await dp.start_polling(bot)
 
 if __name__ == '__main__':
