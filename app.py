@@ -1,7 +1,7 @@
 import os
 import asyncio
 import matplotlib
-matplotlib.use('Agg')
+matplotlib.use('Agg')  # Для роботи на сервері без екрану
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import requests
@@ -12,115 +12,137 @@ from aiogram.filters import Command
 from dotenv import load_dotenv
 from datetime import datetime
 
+# Завантаження токена
 load_dotenv()
 TOKEN = os.getenv('BOT_TOKEN')
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
-# Групи
-KYIV_GROUPS = {
-    '1️⃣ Група 1': '1', '1️⃣.2 Група 1.2': '1.2',
-    '2️⃣ Група 2': '2', '2️⃣.2 Група 2.2': '2.2',
-    '3️⃣ Група 3': '3', '4️⃣ Група 4': '4',
-    '5️⃣ Група 5': '5'
+# Ваші групи (підгрупи як у репозиторії)
+GROUPS = {
+    '1️⃣.1 Група 1.1': '1.1', '1️⃣.2 Група 1.2': '1.2',
+    '2️⃣.1 Група 2.1': '2.1', '2️⃣.2 Група 2.2': '2.2',
+    '3️⃣.1 Група 3.1': '3.1', '3️⃣.2 Група 3.2': '3.2',
+    '4️⃣.1 Група 4.1': '4.1', '4️⃣.2 Група 4.2': '4.2',
+    '5️⃣.1 Група 5.1': '5.1', '5️⃣.2 Група 5.2': '5.2',
+    '6️⃣.1 Група 6.1': '6.1', '6️⃣.2 Група 6.2': '6.2',
 }
 
 @dp.message(Command('start'))
 async def start(message: types.Message):
-    kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text=name, callback_data=f'kiev_{code}')]
-        for name, code in KYIV_GROUPS.items()
-    ])
-    await message.reply('💡 **Київська область: Графік відключень**\n👇 Оберіть вашу групу:', reply_markup=kb, parse_mode='Markdown')
+    # Створюємо клавіатуру з двома кнопками в ряд
+    buttons = [InlineKeyboardButton(text=name, callback_data=f'chart_{code}') for name, code in GROUPS.items()]
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[buttons[i:i+2] for i in range(0, len(buttons), 2)])
+    
+    await message.reply(
+        '⚡ **Моніторинг відключень (Київська область)**\n\n'
+        'Дані беруться з репозиторію XOTT69.\n'
+        '👇 **Оберіть вашу групу:**',
+        reply_markup=keyboard,
+        parse_mode='Markdown'
+    )
 
-@dp.callback_query(F.data.startswith('kiev_'))
-async def kiev_chart(callback: types.CallbackQuery):
-    group_code = callback.data.split('_', 2)[-1]
-    group_name = next((n for n, c in KYIV_GROUPS.items() if c == group_code), 'Група')
+@dp.callback_query(F.data.startswith('chart_'))
+async def send_chart(callback: types.CallbackQuery):
+    group_code = callback.data.split('_')[1]
+    group_name = next((k for k, v in GROUPS.items() if v == group_code), group_code)
     
-    await callback.message.edit_text(f'🎨 Малюю красивий графік для **{group_name}**...')
-    
+    await callback.message.edit_text(f'⏳ Завантажую дані для **{group_name}**...')
+
     try:
-        # 1. Отримання даних
-        api_url = 'https://api.github.com/repos/XOTT69/kiev_region/contents'
-        files = requests.get(api_url).json()
-        json_file = next((f for f in files if f['name'].endswith('.json')), None)
+        # 1. Отримуємо список файлів репозиторію
+        repo_url = 'https://api.github.com/repos/XOTT69/kiev_region/contents'
+        files_resp = requests.get(repo_url, timeout=10).json()
         
-        if json_file:
-            # 2. Обробка даних (ПРИКЛАД: заміни на реальний парсинг з файлу)
-            statuses = [True] * 24
-            
-            # Симуляція реальних відключень для тесту (заміни це на data['outages'])
-            if '1' in group_code: statuses[18:22] = [False]*4; statuses[9:11] = [False]*2
-            if '2' in group_code: statuses[14:18] = [False]*4
-            
-            # Підрахунок статистики
-            off_hours = statuses.count(False)
-            on_hours = statuses.count(True)
-
-            # 3. Створення красивого графіку
-            plt.style.use('dark_background') # Темна тема
-            fig, ax = plt.subplots(figsize=(12, 5))
-            
-            hours = range(24)
-            # Кольори: Яскравий зелений і насичений червоний
-            colors = ['#00E676' if s else '#FF1744' for s in statuses]
-            
-            # Малюємо стовпчики
-            bars = ax.bar(hours, [1]*24, color=colors, width=0.85, edgecolor='#212121', linewidth=1.5)
-            
-            # Налаштування осей
-            ax.set_xticks(range(24))
-            ax.set_xticklabels([f"{h:02d}" for h in range(24)], fontsize=10, color='#E0E0E0')
-            ax.set_yticks([]) # Прибрати вісь Y
-            ax.set_xlim(-0.5, 23.5)
-            
-            # Прибираємо рамки
-            for spine in ax.spines.values():
-                spine.set_visible(False)
-            
-            # Додаємо сітку для зручності (вертикальна)
-            ax.grid(axis='x', color='#424242', linestyle='--', alpha=0.5)
-            
-            # Заголовок всередині картинки
-            plt.title(f'Графік: {group_name}', fontsize=16, pad=20, color='white', fontweight='bold')
-            
-            # Легенда (знизу)
-            green_patch = mpatches.Patch(color='#00E676', label='Є світло')
-            red_patch = mpatches.Patch(color='#FF1744', label='Немає світла')
-            plt.legend(handles=[green_patch, red_patch], loc='upper center', bbox_to_anchor=(0.5, -0.15), 
-                      ncol=2, frameon=False, fontsize=12)
-
-            # Збереження
-            buf = io.BytesIO()
-            plt.savefig(buf, format='png', bbox_inches='tight', dpi=150, facecolor='#121212')
-            buf.seek(0)
-            plt.close()
-            
-            # 4. Відправка
-            photo_file = BufferedInputFile(buf.getvalue(), filename="chart.png")
-            
-            caption = (
-                f'⚡ **{group_name}**\n\n'
-                f'🛑 **Без світла:** {off_hours} год.\n'
-                f'✅ **Зі світлом:** {on_hours} год.\n\n'
-                f'📅 _Дані актуальні на {datetime.now().strftime("%H:%M")}_'
-            )
-            
-            await callback.message.delete()
-            await bot.send_photo(callback.message.chat.id, photo=photo_file, caption=caption, parse_mode='Markdown')
+        # Шукаємо файл з "kiev" або "kyiv" у назві (або просто перший .json)
+        json_file_obj = next((f for f in files_resp if f['name'].endswith('.json')), None)
         
-        else:
-            await callback.message.edit_text('❌ Дані не знайдено.')
+        if not json_file_obj:
+            await callback.message.edit_text("❌ Не знайдено файл даних у репозиторії.")
+            return
+
+        # 2. Завантажуємо сам JSON
+        data = requests.get(json_file_obj['download_url'], timeout=10).json()
+
+        # 3. Парсинг (Fact > Preset)
+        # Спочатку шукаємо у фактичних даних, якщо немає - у планових
+        source_type = "Фактичні (Fact)"
+        outages = data.get('fact', {}).get('outages', [])
+        
+        if not outages:
+            source_type = "Планові (Preset)"
+            outages = data.get('preset', {}).get('outages', [])
+
+        # Формуємо графік на 24 години (True = є світло)
+        hours_status = [True] * 24 
+        
+        for outage in outages:
+            # Перевіряємо, чи стосується відключення нашої групи
+            # У репозиторії групи можуть бути списком або рядком
+            affected_groups = outage.get('groups', [])
+            if group_code in affected_groups:
+                # Отримуємо години (потрібно брати start і end)
+                start_h = int(outage.get('start', 0))
+                end_h = int(outage.get('end', 24))
+                
+                # Позначаємо години як "без світла"
+                for h in range(start_h, end_h):
+                    if 0 <= h < 24:
+                        hours_status[h] = False
+
+        # Статистика
+        off_count = hours_status.count(False)
+        on_count = hours_status.count(True)
+
+        # 4. Малюємо красивий графік
+        plt.style.use('dark_background')
+        fig, ax = plt.subplots(figsize=(10, 4))
+        
+        # Кольори: зелений (#00E676) та червоний (#FF1744)
+        colors = ['#00E676' if s else '#FF1744' for s in hours_status]
+        ax.bar(range(24), [1]*24, color=colors, width=0.8, edgecolor='#212121')
+        
+        # Налаштування осей
+        ax.set_xticks(range(24))
+        ax.set_xticklabels([str(h) for h in range(24)], fontsize=8, color='#B0BEC5')
+        ax.set_yticks([])
+        ax.set_xlim(-0.5, 23.5)
+        
+        # Прибираємо зайві рамки
+        for spine in ax.spines.values():
+            spine.set_visible(False)
+            
+        ax.set_title(f'Графік: {group_name}', color='white', pad=15, fontweight='bold')
+        
+        # Легенда
+        green_patch = mpatches.Patch(color='#00E676', label='Світло є')
+        red_patch = mpatches.Patch(color='#FF1744', label='Відключення')
+        ax.legend(handles=[green_patch, red_patch], loc='upper center', bbox_to_anchor=(0.5, -0.15), ncol=2, frameon=False)
+
+        # Зберігаємо в буфер
+        buf = io.BytesIO()
+        plt.savefig(buf, format='png', bbox_inches='tight', dpi=150, facecolor='#121212')
+        buf.seek(0)
+        plt.close()
+
+        # Відправка
+        file = BufferedInputFile(buf.getvalue(), filename="chart.png")
+        caption = (
+            f"💡 **{group_name}**\n"
+            f"📊 Джерело: {source_type}\n"
+            f"🛑 Немає світла: **{off_count} год.**\n"
+            f"✅ Є світло: **{on_count} год.**\n"
+            f"📅 Оновлено: {datetime.now().strftime('%H:%M')}"
+        )
+
+        await callback.message.delete()
+        await bot.send_photo(callback.message.chat.id, photo=file, caption=caption, parse_mode='Markdown')
 
     except Exception as e:
-        await callback.message.edit_text(f'❌ Помилка: {e}')
-    
-    await callback.answer()
+        await callback.message.edit_text(f"⚠️ Помилка отримання даних: {e}")
 
 async def main():
-    print("Bot started")
     await dp.start_polling(bot)
 
 if __name__ == '__main__':
